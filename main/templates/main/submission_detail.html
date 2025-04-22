@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Submission{% endblock %}
+
+
+{% block content %}
+<!-- View Submission Page -->
+<section class="max-w-4xl mx-auto mt-8 px-4 space-y-8">
+
+    <!-- Submission Header -->
+    <div class="bg-white shadow rounded-xl p-6 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <img src="https://i.pravatar.cc/48?img=11" class="w-12 h-12 rounded-full" alt="">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800">Alice Smith</h2>
+                <p class="text-sm text-gray-500">Submitted on April 22, 2025</p>
+            </div>
+        </div>
+        <span class="text-sm font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full">Submitted</span>
+    </div>
+
+    <!-- Assignment Details -->
+    <div class="bg-white shadow rounded-xl p-6 space-y-2">
+        <h3 class="text-xl font-semibold text-gray-800">Assignment 1: Newton’s Laws</h3>
+        <p class="text-sm text-gray-600">Due: <span class="font-medium">April 25, 2025</span></p>
+        <p class="text-sm text-gray-600">Description: Write explanations of Newton’s laws with real-life examples.</p>
+    </div>
+
+    <!-- Submitted Work -->
+    <div class="bg-white shadow rounded-xl p-6 space-y-3">
+        <h4 class="text-lg font-semibold text-gray-700">📄 Submitted File</h4>
+        <div class="border p-4 rounded-md bg-gray-50 flex justify-between items-center">
+            <span class="text-sm text-gray-700">Alice_NewtonLaws.pdf</span>
+            <a href="#" class="text-blue-600 hover:underline text-sm">Download</a>
+        </div>
+        <!-- For PDFs, you can also embed -->
+        <iframe src="sample.pdf" class="w-full h-64 mt-2 rounded-lg border" frameborder="0"></iframe>
+    </div>
+
+    <!-- Feedback + Grading -->
+    <div class="bg-white shadow rounded-xl p-6 space-y-4">
+        <div>
+            <label for="feedback" class="block text-sm font-medium text-gray-700">💬 Feedback</label>
+            <textarea id="feedback" rows="4"
+                class="mt-1 block w-full border rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div>
+                <label for="grade" class="block text-sm font-medium text-gray-700">🏆 Grade</label>
+                <input type="number" id="grade" max="100" min="0" class="mt-1 w-24 border rounded-md p-2 text-sm"
+                    placeholder="e.g. 92" />
+            </div>
+
+            <button class="mt-6 bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 text-sm">Save
+                Feedback</button>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

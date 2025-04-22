@@ -1,0 +1,97 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Assginment{% endblock %}
+
+
+{% block content %}
+<!-- Assignment Detail Page -->
+<section class="max-w-4xl mx-auto mt-8 px-4 space-y-8">
+
+    <!-- Assignment Info -->
+    <div class="bg-white rounded-xl shadow p-6">
+        <h1 class="text-2xl font-semibold text-gray-800">Assignment 1: Newton’s Laws</h1>
+        <p class="text-gray-600 mt-2">Read the provided notes and write a short explanation of each of Newton’s three
+            laws with real-life examples.</p>
+
+        <div class="mt-4 text-sm text-gray-500">
+            <p>📅 Due: <span class="font-medium text-gray-700">April 25, 2025</span></p>
+            <p>👤 Posted by: <span class="font-medium text-gray-700">Prof. John Doe</span></p>
+        </div>
+
+        <!-- Attachments -->
+        <div class="mt-4">
+            <h4 class="text-sm font-medium text-gray-700 mb-2">📎 Attachments:</h4>
+            <a href="#" class="text-blue-600 hover:underline text-sm">📄 Newtons_Laws_Notes.pdf</a>
+        </div>
+    </div>
+
+    <!-- Student Submission Section -->
+    <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-700 mb-3">📤 Your Submission</h2>
+
+        <!-- Submission Status -->
+        <p class="text-sm text-green-700 font-medium bg-green-100 inline-block px-3 py-1 rounded-full mb-4">Submitted on
+            April 22, 2025</p>
+
+        <!-- File Upload -->
+        <div class="space-y-2">
+            <label for="submission" class="block text-sm font-medium text-gray-700">Upload or re-submit your
+                work</label>
+            <input type="file" id="submission"
+                class="block w-full text-sm border rounded-lg p-2 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+            <button class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Submit
+                Work</button>
+        </div>
+    </div>
+
+    <!-- Teacher Submissions Table (optional) -->
+    <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">📚 Student Submissions</h2>
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-medium text-gray-600">Student</th>
+                        <th class="px-4 py-3 text-left font-medium text-gray-600">Submitted At</th>
+                        <th class="px-4 py-3 text-left font-medium text-gray-600">Status</th>
+                        <th class="px-4 py-3 text-right font-medium text-gray-600">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <tr>
+                        <td class="px-4 py-3 flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/32?img=7" class="w-8 h-8 rounded-full" alt="">
+                            <span>Alice Smith</span>
+                        </td>
+                        <td class="px-4 py-3">Apr 22, 2025</td>
+                        <td class="px-4 py-3">
+                            <span
+                                class="inline-block px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded">Submitted</span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <button class="text-blue-600 hover:underline text-sm">View Work</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-4 py-3 flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/32?img=9" class="w-8 h-8 rounded-full" alt="">
+                            <span>Bob Johnson</span>
+                        </td>
+                        <td class="px-4 py-3 text-gray-400 italic">—</td>
+                        <td class="px-4 py-3">
+                            <span
+                                class="inline-block px-2 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded">Pending</span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <button class="text-blue-600 hover:underline text-sm">Send Reminder</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
