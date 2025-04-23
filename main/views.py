@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .import models
 
 def notes(request):
     return render(request, 'main/notes.html')
@@ -13,9 +13,16 @@ def assignment_detail(request):
     return render(request, 'main/assignment_detail.html')
 
 
-def classroom(request):
+def classroom(request):    
     return render(request, 'main/classroom.html')
 
 
 def home(request):
-    return render(request, 'main/home.html')
+    
+    all_classrooms = models.ClassRoom.objects.all()
+    
+    context = {
+        'classrooms': all_classrooms
+    }
+    
+    return render(request, 'main/home.html', context)

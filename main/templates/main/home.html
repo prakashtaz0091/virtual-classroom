@@ -41,6 +41,23 @@
 
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <!-- Repeat card as needed -->
+            {% for classroom in classrooms %}
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
+                <div class="h-32 bg-cover bg-center" style="background-image: url('{{ classroom.cover_image.url }}');">
+                </div>
+                <div class="absolute bottom-[50%] left-4">
+                    <img src="{{ classroom.teacher.profile.avatar.url }}" alt="Teacher Avatar"
+                        class="w-16 h-16 rounded-full border-2 border-white shadow-md">
+                </div>
+                <div class="pt-8 pb-4 px-4">
+                    <h3 class="text-lg font-medium text-gray-900">{{ classroom.name }}</h3>
+                    <p class="text-sm text-gray-500 mb-4">by {{ classroom.teacher.first_name }}</p>
+                    <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+                        Join Classroom
+                    </button>
+                </div>
+            </div>
+            {% empty %}
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
                 <div class="h-32 bg-cover bg-center"
                     style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80');">
@@ -50,31 +67,11 @@
                         class="w-16 h-16 rounded-full border-2 border-white shadow-md">
                 </div>
                 <div class="pt-8 pb-4 px-4">
-                    <h3 class="text-lg font-medium text-gray-900">Mathematics - Class 10</h3>
-                    <p class="text-sm text-gray-500 mb-4">by Ms. Jane Smith</p>
-                    <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                        Join Classroom
-                    </button>
+                    <h3 class="text-lg font-medium text-gray-900">No classrooms available</h3>
+                    <p class="text-sm text-gray-500 mb-4">No classrooms are currently available.</p>
                 </div>
             </div>
-
-            <!-- Repeat card as needed -->
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
-                <div class="h-32 bg-cover bg-center"
-                    style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80');">
-                </div>
-                <div class="absolute bottom-[50%] left-4">
-                    <img src="https://i.pravatar.cc/48?img=12" alt="Teacher Avatar"
-                        class="w-16 h-16 rounded-full border-2 border-white shadow-md">
-                </div>
-                <div class="pt-8 pb-4 px-4">
-                    <h3 class="text-lg font-medium text-gray-900">Mathematics - Class 10</h3>
-                    <p class="text-sm text-gray-500 mb-4">by Ms. Jane Smith</p>
-                    <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                        Join Classroom
-                    </button>
-                </div>
-            </div>
+            {% endfor %}
 
         </div>
     </div>
