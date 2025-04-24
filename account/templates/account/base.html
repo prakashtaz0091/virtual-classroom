@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+
+    {% block extra_css %} {% endblock %}
+
+    <!-- Heroicons for icons -->
+    <script src="https://unpkg.com/@heroicons/vue@2.0.16/dist/heroicons.min.js" defer></script>
+
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+
+    {% block content %}{% endblock %}
+
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

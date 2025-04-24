@@ -53,13 +53,24 @@
                 <div class="relative">
                     <button id="avatar-button"
                         class="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none border-2 border-blue-600">
-                        <img src="https://i.pravatar.cc/40" alt="avatar" class="w-8 h-8 rounded-full" />
+
+                        {% if request.user.profile.avatar %}
+                        <img src="{{ request.user.profile.avatar.url }}" alt="avatar" class="w-8 h-8 rounded-full" />
+                        {% else %}
+                        <img src="{% static 'main/images/default-user.png' %}" alt="avatar"
+                            class="w-8 h-8 rounded-full" />
+                        {% endif %}
+
                     </button>
 
                     <div id="dropdown-menu"
                         class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-md z-10">
                         <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">View Profile</a>
-                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Logout</a>
+                        <form class="block px-4 py-2 text-sm hover:bg-gray-100" method="post"
+                            action="{% url 'logout_view' %}">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>

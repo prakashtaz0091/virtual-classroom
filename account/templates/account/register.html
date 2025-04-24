@@ -1,0 +1,108 @@
+{% extends 'account/base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+                <!-- error -->
+                {% if form.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">{{ form.errors }}</span>
+                </div>
+                {% endif %}
+            </div>
+            <!-- Credentials Section -->
+            <h3 class="text-lg font-semibold mb-4">Credentials</h3>
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" id="username" name="username" required
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Enter your username">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" required
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Enter your password">
+            </div>
+            <div class="mb-4">
+                <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Confirm your password">
+            </div>
+
+            <!-- Personal Info Section -->
+            <h3 class="text-lg font-semibold mb-4">Personal Info</h3>
+
+            {% if error %}
+            <div class="mb-4">
+                <!-- error -->
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">{{ error }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
+                <input type="text" id="firstname" name="firstname" required
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Enter your first name">
+            </div>
+            <div class="mb-4">
+                <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <input type="text" id="lastname" name="lastname" required
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Enter your last name">
+            </div>
+            <div class="mb-4">
+                <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+                <textarea id="bio" name="bio" rows="3"
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+                    placeholder="Tell us about yourself"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                <select id="role" name="role" required
+                    class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="profile_pic" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                <input type="file" id="profile_pic" name="profile_pic" accept="image/*" onchange="previewImage(event)"
+                    class="mt-1 block w-full">
+                <img id="profile-pic-preview" src="#" alt="Preview" class="mt-2 hidden">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 transition duration-200">Register</button>
+            <a href="{% url 'login_view' %}" class="text-sm text-blue-500 hover:underline">Already have an account?</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    function previewImage(event) {
+        const preview = document.getElementById('profile-pic-preview');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+</script>
+{% endblock %}
