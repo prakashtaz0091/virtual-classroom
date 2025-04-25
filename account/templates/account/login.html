@@ -34,7 +34,7 @@
                 class="w-full bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 transition duration-200">Login</button>
         </form>
         <div class="mt-4 text-center">
-            <a href="#" class="text-sm text-blue-500 hover:underline">Forgot Password?</a>
+            <a href="{% url 'password_reset' %}" class="text-sm text-blue-500 hover:underline">Forgot Password?</a>
             <a href="{% url 'register_view' %}" class="text-sm text-blue-500 hover:underline">Create an
                 Account?</a>
         </div>
