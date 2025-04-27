@@ -5,7 +5,7 @@ from .forms import ClassRoomForm
 from common.decorators import teacher_required
 
 
-@login_required
+
 @teacher_required
 def create_classroom(request):
     
@@ -26,22 +26,22 @@ def create_classroom(request):
     return render(request, 'main/create_classroom.html', context)
 
 
-@login_required
+
 def notes(request):
     return render(request, 'main/notes.html')
 
 
-@login_required
+
 def submission_detail(request):
     return render(request, 'main/submission_detail.html')
 
 
-@login_required
+
 def assignment_detail(request):
     return render(request, 'main/assignment_detail.html')
 
 
-@login_required
+
 def classroom(request, slug):    
     
     try:
@@ -56,7 +56,7 @@ def classroom(request, slug):
     return render(request, 'main/classroom.html', context)
 
 
-@login_required
+
 def home(request):
     
     all_classrooms = models.ClassRoom.objects.all()
