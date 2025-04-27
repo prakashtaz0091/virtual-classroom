@@ -37,7 +37,13 @@
 <!-- classes section  -->
 <section class="bg-white py-12">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Available Classrooms</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+            {% if request.user.role == 'student' %}
+            Available Classrooms
+            {% else %}
+            Your Classrooms
+            {% endif %}
+        </h2>
 
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <!-- Repeat card as needed -->
@@ -52,9 +58,10 @@
                 <div class="pt-8 pb-4 px-4">
                     <h3 class="text-lg font-medium text-gray-900">{{ classroom.name }}</h3>
                     <p class="text-sm text-gray-500 mb-4">by {{ classroom.teacher.first_name }}</p>
-                    <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                        Join Classroom
-                    </button>
+                    <a href="{% url 'classroom' classroom.slug %}"
+                        class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+                        Enter Classroom
+                    </a>
                 </div>
             </div>
             {% empty %}
@@ -67,8 +74,8 @@
                         class="w-16 h-16 rounded-full border-2 border-white shadow-md">
                 </div>
                 <div class="pt-8 pb-4 px-4">
-                    <h3 class="text-lg font-medium text-gray-900">No classrooms available</h3>
-                    <p class="text-sm text-gray-500 mb-4">No classrooms are currently available.</p>
+                    <h3 class="text-lg font-medium text-gray-900">No classrooms </h3>
+                    <p class="text-sm text-gray-500 mb-4">No classrooms currently.</p>
                 </div>
             </div>
             {% endfor %}

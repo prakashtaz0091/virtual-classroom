@@ -73,7 +73,7 @@ def login_view(request):
                 request.session.set_expiry(1209600)  # 14 days in seconds
             else:
                 request.session.set_expiry(0)  # Session expires at the end of the browser session
-            return redirect('main:home')
+            return redirect('home')
         else:
             return render(request, 'account/login.html', {'error': 'Invalid username or password'})
         

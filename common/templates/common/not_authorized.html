@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Not Authorized {% endblock %}
+
+{% block content %}
+
+<div class="w-1/2  m-auto h-[80vh] flex  items-center">
+
+    <div class=" text-center m-auto  bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert">
+        <span class="block sm:inline">You are not authorized to view this page.</span> <br>
+        <a href="{% url 'home' %}" class="underline"> Back to home </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
