@@ -107,17 +107,33 @@ class NoteFile(models.Model):
         return f"{self.note.title} file"
     
     
-    
+POST_TYPES = (
+    ('post', 'Post'),
+    ('announcement', 'Announcement'),
+    ('classwork', 'Classwork'),
+)
+
 class Post(models.Model):
     classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
+    title = models.CharField(max_length=150, default="No title")
+    type = models.CharField(max_length=20, choices=POST_TYPES, default='post')
     content = models.TextField()
+    due_date = models.DateField(null=True, blank=True) # only for assignments/classwork
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"{self.classroom.name} post"
     
+ 
+class PostAttachment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='attachments')
+    file = models.FileField(upload_to='post_attachments')
     
+    def __str__(self):
+        return f"{self.post.title} attachment" 
+ 
+   
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey('account.User', on_delete=models.CASCADE)

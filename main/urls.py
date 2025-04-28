@@ -8,6 +8,13 @@ urlpatterns = [
     path('classroom/create/', views.create_classroom, name='create_classroom'),
     path('classroom/<str:slug>/', views.classroom, name='classroom'),
     
+    # post
+    path('trix-upload/', views.trix_upload, name='trix_upload'),
+    path('post/create/', views.create_post, name='create_post'),
+    path('post/<str:id>/update/', views.post_update, name='post-update'),
+    path('post/<str:id>/delete/', views.post_delete, name='post-delete'),
+    
+    
     
     path('assignment/detail/', views.assignment_detail, name='assignment_detail'),
     
