@@ -6,6 +6,44 @@
 
 {% block content %}
 
+{% if not request.user.is_verified %}
+<div class="w-1/2  m-auto flex  items-center">
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Warning!</strong>
+        <span class="block sm:inline">You are not verified yet. Please verify your account before you can use this
+            platform. Verification may need 2-3 business days.
+        </span>
+    </div>
+</div>
+<!-- hero section  -->
+<section class="bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-10">
+
+        <!-- Text content -->
+        <div class="md:w-1/2">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700 mb-4">
+                Welcome to Virtual Classroom
+            </h1>
+            <p class="text-gray-600 mb-6">
+                Learn from anywhere, connect with mentors, and unlock your potential with interactive online classes
+                designed for the future.
+            </p>
+            <a href="#" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                Get Started
+            </a>
+        </div>
+
+        <!-- Illustration -->
+        <div class="md:w-1/2">
+            <img src="{% static 'main/images/hello.svg' %}" alt="Virtual Learning Illustration"
+                class="w-full h-auto max-h-96 object-contain" />
+        </div>
+    </div>
+</section>
+<!-- hero section  -->
+{% else %}
+
+
 <!-- hero section  -->
 <section class="bg-gray-50 py-12">
     <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-10">
@@ -34,20 +72,67 @@
 <!-- hero section  -->
 
 
-<!-- classes section  -->
+{% if request.user.role == 'student' %}
+<!-- Un joined classes section  -->
 <section class="bg-white py-12">
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">
-            {% if request.user.role == 'student' %}
+
             Available Classrooms
-            {% else %}
-            Your Classrooms
-            {% endif %}
+
         </h2>
 
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <!-- Repeat card as needed -->
-            {% for classroom in classrooms %}
+            {% for classroom in un_joined_classrooms %}
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
+                <div class="h-32 bg-cover bg-center" style="background-image: url('{{ classroom.cover_image.url }}');">
+                </div>
+                <div class="absolute bottom-[50%] left-4">
+                    <img src="{{ classroom.teacher.profile.avatar.url }}" alt="Teacher Avatar"
+                        class="w-16 h-16 rounded-full border-2 border-white shadow-md">
+                </div>
+                <div class="pt-8 pb-4 px-4">
+                    <h3 class="text-lg font-medium text-gray-900">{{ classroom.name }}</h3>
+                    <p class="text-sm text-gray-500 mb-4">by {{ classroom.teacher.first_name }}</p>
+                    <a href="{% url 'join_classroom' classroom.slug %}"
+                        class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+                        Join Classroom
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
+                <div class="h-32 bg-cover bg-center"
+                    style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80');">
+                </div>
+                <div class="absolute bottom-[50%] left-4">
+                    <img src="https://i.pravatar.cc/48?img=12" alt="Teacher Avatar"
+                        class="w-16 h-16 rounded-full border-2 border-white shadow-md">
+                </div>
+                <div class="pt-8 pb-4 px-4">
+                    <h3 class="text-lg font-medium text-gray-900">No classrooms </h3>
+                    <p class="text-sm text-gray-500 mb-4">No classrooms currently.</p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<!-- classes section  -->
+
+<!-- Joined Classroom section  -->
+<section class="bg-white py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+            Joined Classrooms
+        </h2>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Repeat card as needed -->
+            {% for classroom in joined_classrooms %}
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
                 <div class="h-32 bg-cover bg-center" style="background-image: url('{{ classroom.cover_image.url }}');">
                 </div>
@@ -85,7 +170,60 @@
 </section>
 
 <!-- classes section  -->
+{% else %}
+<!-- teacher classes section  -->
+<section class="bg-white py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+
+            Your Classrooms
+
+        </h2>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Repeat card as needed -->
+            {% for classroom in classrooms %}
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
+                <div class="h-32 bg-cover bg-center" style="background-image: url('{{ classroom.cover_image.url }}');">
+                </div>
+                <div class="absolute bottom-[50%] left-4">
+                    <img src="{{ classroom.teacher.profile.avatar.url }}" alt="Teacher Avatar"
+                        class="w-16 h-16 rounded-full border-2 border-white shadow-md">
+                </div>
+                <div class="pt-8 pb-4 px-4">
+                    <h3 class="text-lg font-medium text-gray-900">{{ classroom.name }}</h3>
+                    <p class="text-sm text-gray-500 mb-4">by {{ classroom.teacher.first_name }}</p>
+                    <a href="{% url 'join_classroom' classroom.slug %}"
+                        class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+                        Enter Classroom
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden relative">
+                <div class="h-32 bg-cover bg-center"
+                    style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80');">
+                </div>
+                <div class="absolute bottom-[50%] left-4">
+                    <img src="https://i.pravatar.cc/48?img=12" alt="Teacher Avatar"
+                        class="w-16 h-16 rounded-full border-2 border-white shadow-md">
+                </div>
+                <div class="pt-8 pb-4 px-4">
+                    <h3 class="text-lg font-medium text-gray-900">No classrooms </h3>
+                    <p class="text-sm text-gray-500 mb-4">No classrooms currently.</p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<!-- classes section  -->
+
+{% endif %}
 
 
+{% endif %}
 
 {% endblock %}

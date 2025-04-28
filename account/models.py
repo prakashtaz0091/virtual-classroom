@@ -8,6 +8,7 @@ USER_ROLES = (
 
 class User(AbstractUser):
     role = models.CharField(max_length=20, choices=USER_ROLES, default='student')
+    is_verified = models.BooleanField(default=False)
     
     @property
     def full_name(self):

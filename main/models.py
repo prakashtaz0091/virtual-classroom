@@ -20,7 +20,7 @@ class ClassRoom(models.Model):
     
 class ClassroomMember(models.Model):
     student = models.ForeignKey('account.User', on_delete=models.CASCADE)
-    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, related_name='members')
     joined_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -132,6 +132,7 @@ class PostAttachment(models.Model):
     
     def __str__(self):
         return f"{self.post.title} attachment" 
+    
  
    
 class Comment(models.Model):

@@ -7,6 +7,7 @@ urlpatterns = [
     # classroom
     path('classroom/create/', views.create_classroom, name='create_classroom'),
     path('classroom/<str:slug>/', views.classroom, name='classroom'),
+    path('classroom/<str:slug>/join/', views.join_classroom, name='join_classroom'),
     
     # post
     path('trix-upload/', views.trix_upload, name='trix_upload'),

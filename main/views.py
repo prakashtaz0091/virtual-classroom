@@ -10,6 +10,18 @@ from django.conf import settings
 import os
 import uuid
 from datetime import datetime
+from .import signals
+from django.db.models import F
+
+
+
+def join_classroom(request, slug):
+    try:
+        classroom = models.ClassRoom.objects.get(slug=slug)
+        models.ClassroomMember.objects.create(student=request.user, classroom=classroom)
+        return redirect('classroom', slug=slug)
+    except models.ClassRoom.DoesNotExist:
+        return redirect('home')
 
 
 def trix_upload(request):
@@ -57,7 +69,14 @@ def post_update(request, id):
 
 @teacher_required
 def post_delete(request, id):
-    pass
+    try:
+        post = models.Post.objects.get(id=id)
+        post.delete()
+        messages.success(request, "Post deleted successfully!")
+        return redirect('classroom', slug=post.classroom.slug)
+    except models.Post.DoesNotExist:
+        messages.error(request, "Unable to delete post!")
+        return redirect('classroom', slug=post.classroom.slug)
 
 
 @teacher_required
@@ -153,10 +172,19 @@ def classroom(request, slug):
 
 def home(request):
     
-    all_classrooms = models.ClassRoom.objects.all()
-    
-    context = {
-        'classrooms': all_classrooms
-    }
+    if request.user.role == 'student':        
+        joined_classrooms = all_classrooms.filter(members__student=request.user)
+        un_joined_classrooms = all_classrooms.exclude(members__student=request.user)
+        
+        context = {
+            'joined_classrooms': joined_classrooms,
+            'un_joined_classrooms': un_joined_classrooms
+        }
+    else:
+        all_classrooms = models.ClassRoom.objects.filter(teacher=request.user)
+        context = {
+            'classrooms': all_classrooms
+        }
+         
     
     return render(request, 'main/home.html', context)

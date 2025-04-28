@@ -275,7 +275,8 @@
                 </div>
                 <p class="text-gray-700">
                     {% if post.type == 'announcement' %}📢 {% endif %}
-                    <b>{{ post.title }}</b> <br>
+                    <b>{{ post.title }}
+                    </b> <br>
                     {{ post.content|safe }}
                 </p>
             </div>
@@ -501,7 +502,6 @@
         document.getElementById(`tab-${tab}`).classList.remove('text-gray-600');
     }
 </script>
-
 
 
 
