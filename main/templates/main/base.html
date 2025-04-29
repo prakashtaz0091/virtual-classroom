@@ -46,6 +46,10 @@
             <!-- Right buttons -->
             <div class="hidden md:flex items-center space-x-4">
 
+                <a href="{% url 'notes' %}">
+                    Notes
+                </a>
+
                 {% if request.user.role == 'teacher' %}
                 <!-- Plus button -->
                 <a href="{% url 'create_classroom' %}"

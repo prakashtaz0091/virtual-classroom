@@ -138,8 +138,19 @@ def create_classroom(request):
 
 
 def notes(request):
-    return render(request, 'main/notes.html')
-
+    try:
+        notes = models.Note.objects.prefetch_related('files').all().order_by('-created_at')
+        premium_notes = notes.filter(is_premium=True)
+        free_notes = notes.exclude(is_premium=True)
+    except models.Note.DoesNotExist:
+        return redirect('home')
+    
+    context = {
+        'premium_notes': premium_notes,
+        'free_notes': free_notes
+    }
+    
+    return render(request, 'main/notes.html', context)
 
 
 def submission_detail(request):
@@ -157,13 +168,15 @@ def classroom(request, slug):
     try:
         classroom = models.ClassRoom.objects.get(slug=slug)
         posts = models.Post.objects.filter(classroom=classroom).order_by('-updated_at')
+        members = models.ClassroomMember.objects.filter(classroom=classroom)
     except models.ClassRoom.DoesNotExist:
         return redirect('home')
     
     context = {
         'classroom': classroom,
         'slug': slug,
-        'posts': posts
+        'posts': posts,
+        'members': members
     }
     
     return render(request, 'main/classroom.html', context)
@@ -173,6 +186,7 @@ def classroom(request, slug):
 def home(request):
     
     if request.user.role == 'student':        
+        all_classrooms = models.ClassRoom.objects.all()
         joined_classrooms = all_classrooms.filter(members__student=request.user)
         un_joined_classrooms = all_classrooms.exclude(members__student=request.user)
         
@@ -181,9 +195,9 @@ def home(request):
             'un_joined_classrooms': un_joined_classrooms
         }
     else:
-        all_classrooms = models.ClassRoom.objects.filter(teacher=request.user)
+        teacher_classrooms = models.ClassRoom.objects.filter(teacher=request.user)
         context = {
-            'classrooms': all_classrooms
+            'classrooms': teacher_classrooms
         }
          
     

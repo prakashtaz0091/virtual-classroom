@@ -91,6 +91,7 @@ class Note(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField()
     is_premium = models.BooleanField(default=False)
+    amount = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -99,7 +100,7 @@ class Note(models.Model):
 
 
 class NoteFile(models.Model):
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='files')
     file = models.FileField(upload_to='note_files')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     

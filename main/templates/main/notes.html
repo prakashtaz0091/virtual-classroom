@@ -35,23 +35,22 @@
     <!-- Premium Notes Tab Content -->
     <div id="premium-content" class="tab-content hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <!-- Example Premium Note Card -->
-        <div class="bg-white shadow rounded-lg p-4 relative">
-            <span class="absolute top-2 right-2 bg-yellow-200 text-yellow-900 text-xs px-2 py-1 rounded">₹99</span>
-            <h3 class="text-lg font-semibold mb-2">JEE Crash Course Notes</h3>
-            <p class="text-gray-600 text-sm mb-3">Concise and complete notes for last-minute prep.</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">
-                Buy Now
-            </button>
-        </div>
+
+        {% for note in premium_notes %}
 
         <div class="bg-white shadow rounded-lg p-4 relative">
-            <span class="absolute top-2 right-2 bg-yellow-200 text-yellow-900 text-xs px-2 py-1 rounded">₹149</span>
-            <h3 class="text-lg font-semibold mb-2">NEET Biology Handwritten Notes</h3>
-            <p class="text-gray-600 text-sm mb-3">Complete biology notes with diagrams and tips.</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">
+            <span class="absolute top-2 right-2 bg-yellow-200 text-yellow-900 text-xs px-2 py-1 rounded">Rs.
+                {{note.amount }}</span>
+            <h3 class="text-lg font-semibold mb-2">{{ note.title }}</h3>
+            <p class="text-gray-600 text-sm mb-3">{{ note.description }}</p>
+            <a href="{% url 'esewa-pay' note.id %}"
+                class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">
                 Buy Now
-            </button>
+            </a>
         </div>
+
+        {% endfor %}
+
     </div>
 </div>
 

@@ -4,7 +4,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_URL = 'http://localhost:8000'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'main',
     'account',
-    'common'
+    'common',
+    'esewa_payment',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,11 @@ DEFAULT_FROM_EMAIL = 'noreply@example.com'
 # DEFAULT_FROM_EMAIL = 'code.ing2468@gmail.com'
 # EMAIL_HOST_PASSWORD = ''
 
+# eSewa credentials (replace with your actual details)
+ESEWA_CONFIG = {
+    "PRODUCT_CODE": "EPAYTEST",  # Replace with your actual code in production
+    "SUCCESS_URL": f"{BASE_URL}/esewa-payment/success/",
+    "FAILURE_URL": f"{BASE_URL}/esewa-payment/failure/",
+    "MERCHANT_SECRET": "8gBm/:&EnhH.1/q",  # Used to generate HMAC signature
+    "FORM_URL": "https://rc-epay.esewa.com.np/api/epay/main/v2/form",  # Use production URL in prod
+}

@@ -24,6 +24,8 @@ urlpatterns = [
     path('main/', include('main.urls')),
     path('accounts/', include('account.urls')),
     path('common/', include('common.urls')),
+    path('esewa-payment/', include('esewa_payment.urls')),
+
 ]
 
 if settings.DEBUG:
