@@ -106,7 +106,17 @@ class NoteFile(models.Model):
     
     def __str__(self):
         return f"{self.note.title} file"
-    
+
+
+
+class BoughtFile(models.Model):
+    user = models.ForeignKey('account.User', on_delete=models.CASCADE, related_name='bought_files')
+    file = models.ForeignKey(NoteFile, on_delete=models.CASCADE)
+    bought_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.file.note.title} file bought by {self.user.username}"
+
     
 POST_TYPES = (
     ('post', 'Post'),

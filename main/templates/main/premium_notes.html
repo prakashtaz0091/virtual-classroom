@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Premium Notes{% endblock %}
+
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
+
+    <div class="bg-white p-8 rounded shadow-md max-w-md">
+        {% if messages %}
+        <ul class="list-disc list-inside text-red-600">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    {% for bought_note in notes %}
+    <div class="bg-white p-8 rounded shadow-md max-w-md">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">{{ bought_note.file.note.title }}</h2>
+        <p class="text-gray-700 mb-4">{{ bought_note.file.note.description }}</p>
+        <a href="{{ bought_note.file.file.url }}" class="text-blue-600 underline"
+            download="{{ bought_note.file.file.name }}">{{ bought_note.file.file.name }}</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

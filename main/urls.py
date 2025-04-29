@@ -22,5 +22,6 @@ urlpatterns = [
     path('submission/detail/', views.submission_detail, name='submission_detail'),
     
     path('notes/', views.notes, name='notes'),
+    path('premium_notes/', views.premium_notes, name='premium_notes'),
     
 ]

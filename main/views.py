@@ -15,6 +15,14 @@ from django.db.models import F
 
 
 
+def premium_notes(request):
+    try:
+        notes = models.BoughtFile.objects.filter(user=request.user).order_by('-bought_at')
+    except models.BoughtFile.DoesNotExist:
+        return redirect('home')
+    return render(request, 'main/premium_notes.html', {'notes': notes})
+
+
 def join_classroom(request, slug):
     try:
         classroom = models.ClassRoom.objects.get(slug=slug)
