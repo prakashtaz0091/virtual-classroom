@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm
-from .models import User, Profile, Withdrawal
+from .models import User, Profile, Withdrawal, UserOTP
 from main.models import Post
 from esewa_payment.models import EsewaTransaction
 from django.db.models import Sum
 from django.contrib import messages
+from .utils import email_validation, generate_otp, is_otp_expired
+from django.core.exceptions import ValidationError, MultipleObjectsReturned
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def change_password(request):
@@ -13,7 +17,57 @@ def change_password(request):
 
 
 def change_email(request):
-    pass
+    if request.method == "POST":
+        new_email = request.POST.get("new_email")
+
+        try:
+            email_validation(new_email)
+        except ValidationError:
+            messages.error(request, "Invalid email address.")
+            return redirect("profile_view")
+        else:
+            new_otp = generate_otp()
+            UserOTP.objects.create(user=request.user, otp=new_otp, new_email=new_email)
+            send_mail(
+                subject="Email change request",
+                message=f"To change your email, please use this OTP: {new_otp}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[request.user.email],
+            )
+            return redirect("email_change_confirm_view")
+
+
+def email_change_confirm_view(request):
+    if request.method == "POST":
+        otp = request.POST.get("otp")
+        try:
+            otp_from_db = UserOTP.objects.get(user=request.user)
+        except UserOTP.DoesNotExist:
+            messages.error(request, "Invalid OTP.")
+            return redirect("profile_view")
+        except MultipleObjectsReturned:
+            messages.error(request, "Internal server error.")
+            return redirect("profile_view")
+        else:
+            if otp == otp_from_db.otp:
+                if is_otp_expired(otp_from_db, settings.OTP_EXPIRY_TIME):
+                    messages.error(request, "OTP has expired.")
+                    return redirect("profile_view")
+                else:
+                    old_email = request.user.email
+                    request.user.email = otp_from_db.new_email
+                    request.user.save()
+                    otp_from_db.delete()
+                    messages.success(request, "Email changed successfully!")
+                    send_mail(
+                        subject="Email change done",
+                        message=f"Your email has been changed to {request.user.email}.",
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[old_email],
+                    )
+                    return redirect("profile_view")
+
+    return render(request, "account/email_change_confirm.html")
 
 
 def request_withdrawal(request):
@@ -121,7 +175,9 @@ def profile_view(request):
         classroom__in=request.user.classrooms.all()
     ).count()
 
-    user_earnings = EsewaTransaction.objects.filter(receiver=request.user)
+    user_earnings = EsewaTransaction.objects.filter(
+        receiver=request.user, status="success"
+    )
     total_earning_amount = user_earnings.aggregate(
         total_amount=Sum("notes__amount")
     ).get("total_amount")

@@ -149,3 +149,6 @@ ESEWA_CONFIG = {
     "MERCHANT_SECRET": "8gBm/:&EnhH.1/q",  # Used to generate HMAC signature
     "FORM_URL": "https://rc-epay.esewa.com.np/api/epay/main/v2/form",  # Use production URL in prod
 }
+
+
+OTP_EXPIRY_TIME = 5  # in minutes
