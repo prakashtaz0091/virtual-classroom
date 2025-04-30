@@ -1,0 +1,138 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto flex flex-col gap-8 mt-3">
+
+    <!-- messages -->
+    {% if messages %}
+    <ul class="flex flex-col gap-2 list-disc list-inside text-red-600">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Profile Section -->
+    <section class="  bg-white p-6 rounded-xl shadow">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Profile</h2>
+        <div class="flex items-center space-x-6">
+            <img src="{{ user.profile.avatar.url }}" alt="User Avatar"
+                class="w-24 h-24 rounded-full border shadow-sm object-cover">
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800">{{ user.get_full_name }}</h3>
+                <p class="text-sm text-gray-600">{{ user.email }}</p>
+                <p class="text-sm text-gray-500 mt-1">Role: {{ user.role|title }}</p>
+                <p class="text-sm text-gray-500 mt-1">Joined: {{ user.date_joined|naturalday }}</p>
+                <p class="text-sm text-gray-500 mt-1">Last Login: {{ user.last_login|naturaltime }}</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Earnings Section -->
+    <section class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Earnings</h2>
+
+        <!-- Scrollable Table Container -->
+        <div class="overflow-y-auto max-h-96 border rounded-lg">
+            <table class="min-w-full text-sm text-left text-gray-700">
+                <thead class="bg-gray-100 sticky top-0">
+                    <tr>
+                        <th class="px-4 py-3 font-medium">Note Name</th>
+                        <th class="px-4 py-3 font-medium">Price (Rs.)</th>
+                        <th class="px-4 py-3 font-medium">Bought By</th>
+                        <th class="px-4 py-3 font-medium">Sell Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for earning in earnings %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-2">{{ earning.notes.title }}</td>
+                        <td class="px-4 py-2">Rs. {{ earning.notes.amount }}</td>
+                        <td class="px-4 py-2">{{ earning.initiater.full_name }}</td>
+                        <td class="px-4 py-2">{{ earning.updated_at|date:"Y-m-d" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-gray-500">No earnings yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-800">
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner">
+                <p class="font-medium">Total Earnings</p>
+                <p class="text-green-600 font-semibold">Rs. {{ total_amount }}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner">
+                <p class="font-medium">Total Withdrawn</p>
+                <p class="text-red-500 font-semibold">Rs. {{ total_withdrawn }}</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner">
+                <p class="font-medium">Remaining Earnings</p>
+                <p class="text-blue-600 font-semibold">Rs. {{ remaining_earnings }}</p>
+            </div>
+        </div>
+
+        <!-- Withdrawal Request Form -->
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Request Withdrawal</h3>
+            <form action="{% url 'request_withdrawal' %}" method="POST"
+                class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                {% csrf_token %}
+                <input type="number" name="amount" placeholder="Amount in Rs." required min="100"
+                    class="w-full sm:w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg transition">
+                    Send Request
+                </button>
+            </form>
+        </div>
+
+    </section>
+
+
+
+    <!-- Settings Section -->
+    <section class="bg-white p-6 rounded-xl shadow space-y-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Settings</h2>
+
+        <!-- Change Password -->
+        <form method="post" action="{% url 'change_password' %}" class="space-y-4">
+            {% csrf_token %}
+            <h3 class="text-lg font-medium text-gray-700">Change Password</h3>
+            <input type="password" name="old_password" placeholder="Current Password"
+                class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+            <input type="password" name="new_password1" placeholder="New Password"
+                class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+            <input type="password" name="new_password2" placeholder="Confirm New Password"
+                class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+            <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+                Update Password
+            </button>
+        </form>
+
+        <!-- Change Email -->
+        <form method="post" action="{% url 'change_email' %}" class="space-y-4">
+            {% csrf_token %}
+            <h3 class="text-lg font-medium text-gray-700">Change Email</h3>
+            <input type="email" name="new_email" placeholder="New Email"
+                class="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+            <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+                Update Email
+            </button>
+        </form>
+    </section>
+
+
+</div>
+
+
+{% endblock %}
