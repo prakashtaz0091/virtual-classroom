@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "account",
     "common",
     "esewa_payment",
+    "background_task",
 ]
 
 MIDDLEWARE = [

@@ -10,6 +10,7 @@ from .utils import email_validation, generate_otp, is_otp_expired
 from django.core.exceptions import ValidationError, MultipleObjectsReturned
 from django.core.mail import send_mail
 from django.conf import settings
+from .background_tasks import background_send_mail
 
 
 def change_password(request):
@@ -28,7 +29,7 @@ def change_email(request):
         else:
             new_otp = generate_otp()
             UserOTP.objects.create(user=request.user, otp=new_otp, new_email=new_email)
-            send_mail(
+            background_send_mail(
                 subject="Email change request",
                 message=f"To change your email, please use this OTP: {new_otp}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
@@ -59,7 +60,7 @@ def email_change_confirm_view(request):
                     request.user.save()
                     otp_from_db.delete()
                     messages.success(request, "Email changed successfully!")
-                    send_mail(
+                    background_send_mail(
                         subject="Email change done",
                         message=f"Your email has been changed to {request.user.email}.",
                         from_email=settings.DEFAULT_FROM_EMAIL,
