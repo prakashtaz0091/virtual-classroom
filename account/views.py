@@ -8,13 +8,30 @@ from django.db.models import Sum
 from django.contrib import messages
 from .utils import email_validation, generate_otp, is_otp_expired
 from django.core.exceptions import ValidationError, MultipleObjectsReturned
-from django.core.mail import send_mail
 from django.conf import settings
 from .background_tasks import background_send_mail
+from django.contrib.auth import update_session_auth_hash
 
 
 def change_password(request):
-    pass
+    if request.method == "POST":
+        old_password = request.POST.get("old_password")
+        new_password = request.POST.get("new_password1")
+        confirm_password = request.POST.get("new_password2")
+
+        if not request.user.check_password(old_password):
+            messages.error(request, "Invalid old password.")
+            return redirect("profile_view")
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect("profile_view")
+
+        request.user.set_password(new_password)
+        request.user.save()
+        update_session_auth_hash(request, request.user)
+        messages.success(request, "Password changed successfully!")
+    return redirect("profile_view")
 
 
 def change_email(request):
