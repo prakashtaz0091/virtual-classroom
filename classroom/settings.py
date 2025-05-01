@@ -1,17 +1,31 @@
-from pathlib import Path
+import environ
+import os
+# Initialize environment variables
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+# Set the project base directory
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+
+
 BASE_URL = "http://localhost:8000"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7lscw)pd70rh@0$ga-xy^f53hq5yswfsem!@asa6(!ct)p0z5c"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set the DEBUG variable
+DEBUG = env.bool("DEBUG", default=False)
+
 
 ALLOWED_HOSTS = []
 
@@ -77,13 +91,23 @@ WSGI_APPLICATION = "classroom.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "demo_db",
-        "USER": "demo_user",
-        "PASSWORD": "demo_pass",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "NAME": env("POSTGRESQL_DB_NAME"),
+        "USER": env("POSTGRESQL_DB_USER"),
+        "PASSWORD": env("POSTGRESQL_DB_PASS"),
+        "HOST": env("POSTGRESQL_DB_HOST"),
+        "PORT": env("POSTGRESQL_DB_PORT"),
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "demo_db_cr2h",
+#         "USER": "demo_db_user",
+#         "PASSWORD": "npmRDXlmLJSPKBinFdzerTpuyvVJp1e5",
+#         "HOST": "dpg-d09op0ruibrs73fi44fg-a.oregon-postgres.render.com",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # custom user
@@ -125,10 +149,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static"
+# STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -140,9 +165,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-DEFAULT_FROM_EMAIL = "noreply@example.com"
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -154,10 +179,12 @@ DEFAULT_FROM_EMAIL = "noreply@example.com"
 
 # eSewa credentials (replace with your actual details)
 ESEWA_CONFIG = {
-    "PRODUCT_CODE": "EPAYTEST",  # Replace with your actual code in production
+    "PRODUCT_CODE": env(
+        "ESEWA_PRODUCT_CODE"
+    ),  # Replace with your actual code in production
     "SUCCESS_URL": f"{BASE_URL}/esewa-payment/success/",
     "FAILURE_URL": f"{BASE_URL}/esewa-payment/failure/",
-    "MERCHANT_SECRET": "8gBm/:&EnhH.1/q",  # Used to generate HMAC signature
+    "MERCHANT_SECRET": env("ESEWA_MERCHANT_SECRET"),  # Used to generate HMAC signature
     "FORM_URL": "https://rc-epay.esewa.com.np/api/epay/main/v2/form",  # Use production URL in prod
 }
 
