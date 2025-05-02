@@ -106,16 +106,6 @@ DATABASES = {
         "PORT": env("POSTGRESQL_DB_PORT"),
     }
 }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "demo_db_cr2h",
-#         "USER": "demo_db_user",
-#         "PASSWORD": "npmRDXlmLJSPKBinFdzerTpuyvVJp1e5",
-#         "HOST": "dpg-d09op0ruibrs73fi44fg-a.oregon-postgres.render.com",
-#         "PORT": "5432",
-#     }
-# }
 
 
 # custom user
