@@ -165,9 +165,13 @@ def assignment_detail(request):
 
 def classroom(request, slug):
     try:
-        classroom = models.ClassRoom.objects.get(slug=slug)
-        posts = models.Post.objects.filter(classroom=classroom).order_by("-updated_at")
-        members = models.ClassroomMember.objects.filter(classroom=classroom)
+        classroom = (
+            models.ClassRoom.objects.select_related("teacher")
+            .prefetch_related("members", "posts")
+            .get(slug=slug)
+        )
+        posts = classroom.posts.all().order_by("-updated_at")
+        members = classroom.members.all()
     except models.ClassRoom.DoesNotExist:
         return redirect("home")
 
@@ -178,9 +182,12 @@ def classroom(request, slug):
 
 def home(request):
     if request.user.role == "student":
-        all_classrooms = models.ClassRoom.objects.all()
-        joined_classrooms = all_classrooms.filter(members__student=request.user)
-        un_joined_classrooms = all_classrooms.exclude(members__student=request.user)
+        joined_classrooms = models.ClassRoom.objects.filter(
+            members__student=request.user
+        )
+        un_joined_classrooms = models.ClassRoom.objects.exclude(
+            members__student=request.user
+        )
 
         context = {
             "joined_classrooms": joined_classrooms,
